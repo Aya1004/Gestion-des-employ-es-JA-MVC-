@@ -1,10 +1,13 @@
 package Controller;
 
+import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
+import Model.CongeModel;
 import Model.EmployeModel;
 import Model.Poste;
 import Model.Role;
@@ -13,44 +16,57 @@ import View.EmployeView;
 public class EmployeController {
 	private EmployeView view;
 	private EmployeModel model;
+	private CongeModel model2;
+
 	public EmployeController(EmployeView view,EmployeModel model) {
 		this.view=view;
 		this.model=model;
 		this.view.ajou.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-            	int id = (int) view.idSpinner.getValue();
-				String nom=view.saisie.getText();
-				String prenom=view.saisie1.getText();
-				String email=view.saisie2.getText();
-				String telephone=view.saisie3.getText();
-				double salaire=Double.parseDouble(view.saisie4.getText());
-				Role role=(Role) view.choix.getSelectedItem();
-				Poste poste=(Poste) view.choix2.getSelectedItem();
-				model.addEmploye(id, nom, prenom, email, telephone, salaire, role, poste);
-				Object[] row = {id,nom, prenom,email, telephone, salaire, role, poste};
-                System.out.println(id+nom+prenom+email+telephone+salaire+role+poste);
-                view.model.addRow(row);
-			}
+				System.out.println("ajoute");
+
+				 if (view.getLastName().getText().isEmpty() || view.getFirstName().getText().isEmpty() || view.getEmail().getText().isEmpty() || view.getPhone().getText().isEmpty()) {
+	                    JOptionPane.showMessageDialog(null, "All fields must be filled out", "Input Error", JOptionPane.ERROR_MESSAGE);
+	                    return;
+	                }
+				String nom=view.getLastName().getText();
+				String prenom=view.getFirstName().getText();
+				String email=view.getEmail().getText();
+				String telephone=view.getPhone().getText();
+				Role role=(Role) view.getRoles().getSelectedItem();
+				Poste poste=(Poste) view.getPostes().getSelectedItem();
+				try {
+					double salaire = Double.parseDouble(view.getSalary().getText());
+					if(model.add(nom, prenom, email, telephone, salaire, role, poste)) {
+						JOptionPane.showMessageDialog(null, "Employé ajouté avec succées","Comfirmation",JOptionPane.INFORMATION_MESSAGE);
+					}
+					else JOptionPane.showMessageDialog(null, "Echec d'ajout","Error",JOptionPane.ERROR_MESSAGE);
+ 
+			    } catch(NumberFormatException er) {
+			    	er.printStackTrace();
+			    }
+						}
+			 
 		});
 		this.view.modif.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int selectedRow = view.table.getSelectedRow();
                 if (selectedRow != -1) { 
-                	int id = (int) view.idSpinner.getValue();
-                    String nom = view.saisie.getText();
-                    String prenom = view.saisie1.getText();
-                    String email = view.saisie2.getText();
-                    String telephone = view.saisie3.getText();
+                	int id = (int) view.table.getValueAt(selectedRow, 0);
+                    String nom = view.getLastName().getText();
+                    String prenom = view.getFirstName().getText();
+                    String email = view.getEmail().getText();
+                    String telephone = view.getPhone().getText();
                     double salaire = 0;
                     try {
-                        salaire = Double.parseDouble(view.saisie4.getText());
+                        salaire = Double.parseDouble(view.getSalary().getText());
                     }catch(NumberFormatException ex) {
                         JOptionPane.showMessageDialog(view, "Entrée de salaire invalide. Valeur par défaut définie.");
                     }
-                    Role role = (Role) view.choix.getSelectedItem();
-                    Poste poste = (Poste) view.choix2.getSelectedItem();
+                    Role role = (Role) view.getRoles().getSelectedItem();
+                    Poste poste = (Poste) view.getPostes().getSelectedItem();
                     model.update(id,nom, prenom, email, telephone, salaire, role, poste);
                     view.model.setValueAt(id,selectedRow,0);
                     view.model.setValueAt(nom, selectedRow, 1);
@@ -81,12 +97,13 @@ public class EmployeController {
 		this.view.aff.addActionListener(new ActionListener() {
 		@Override
 		public void actionPerformed(ActionEvent e) {
-			Object[][] Temployes=model.employes();
+			 ArrayList<Object[]> employes = model.afficher();
 			view.model.setRowCount(0);
-			for(Object[] emp :Temployes) {
+			for(Object[] emp :employes) {
 				view.model.addRow(emp);
 			}
 			}
 		});
-	}
+ }
+
 }

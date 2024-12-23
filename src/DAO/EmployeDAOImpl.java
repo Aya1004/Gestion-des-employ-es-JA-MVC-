@@ -12,7 +12,7 @@ import Model.Employe;
 import Model.Poste;
 import Model.Role;
 
-public class EmployeDAOImpl implements EmployeDAOI {
+public class EmployeDAOImpl implements GenericDAOI<Employe> {
 	private static DBConnection conn;
 	
 	public EmployeDAOImpl() {
@@ -20,21 +20,20 @@ public class EmployeDAOImpl implements EmployeDAOI {
 	}
 	
 	@Override
-	public void addEmploye(Employe emp) {
-		String sql="INSERT INTO Employee (id,nom,prenom,email,phone,salaire,role,poste) VALUES (?,?,?,?,?,?,?,?)";
+	public void add(Employe emp) {
+		String sql="INSERT INTO Employee (nom,prenom,email,phone,salaire,role,poste) VALUES (?,?,?,?,?,?,?)";
 		try(PreparedStatement stmt=conn.getConnexion().prepareStatement(sql)){
-			stmt.setInt(1,emp.getId());
-			stmt.setString(2,emp.getNom());
-			stmt.setString(3,emp.getPrenom());
-			stmt.setString(4,emp.getEmail());
-			stmt.setString(5,emp.getTelephone());
-			stmt.setDouble(6,emp.getSalaire());
-			stmt.setString(7,emp.getRole());
-			stmt.setString(8,emp.getPoste());
+			stmt.setString(1,emp.getNom());
+			stmt.setString(2,emp.getPrenom());
+			stmt.setString(3,emp.getEmail());
+			stmt.setString(4,emp.getTelephone());
+			stmt.setDouble(5,emp.getSalaire());
+			stmt.setString(6,emp.getRole());
+			stmt.setString(7,emp.getPoste());
 			stmt.executeUpdate();
             JOptionPane.showMessageDialog(null, "Employe ajouté avec succées!", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
 		}catch(SQLException e) {
-			System.out.println(e.getMessage());            JOptionPane.showMessageDialog(null, "Employee added successfully!", "Confirmation", JOptionPane.INFORMATION_MESSAGE);
+			System.out.println(e.getMessage());            
             JOptionPane.showMessageDialog(null, "Echec d'ajout!"+e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
 		}
 	}
@@ -77,8 +76,8 @@ public class EmployeDAOImpl implements EmployeDAOI {
             JOptionPane.showMessageDialog(null, "Erreur lors de la suppression de l'employé : " + e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
         }
 	}
-	public List<Employe>employes() {
-		List<Employe>emp=new ArrayList<>();
+	public ArrayList<Employe>afficher() {
+		ArrayList<Employe>emp=new ArrayList<>();
 		String sql = "SELECT * FROM Employee";
 		try (PreparedStatement stmt = conn.getConnexion().prepareStatement(sql);
 				ResultSet rslt=stmt.executeQuery()){
@@ -100,4 +99,44 @@ public class EmployeDAOImpl implements EmployeDAOI {
 		}
 		return emp;
 	}
+
+	@Override
+    public Employe findById(int id) {
+        String sql = "SELECT * FROM Employee WHERE id = ?";
+        try (PreparedStatement stmt = conn.getConnexion().prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new Employe(
+                    rs.getInt("id"),
+                    rs.getString("nom"),
+                    rs.getString("prenom"),
+                    rs.getString("email"),
+                    rs.getString("phone"),
+                    rs.getDouble("salaire"),
+                    Role.valueOf(rs.getString("role")),
+					Poste.valueOf(rs.getString("poste"))
+                );
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null; // Retourne null si l'employé n'est pas trouvé
+    }
+	 public List<String> getEmployeeNames() {
+	        List<String> employeeNames = new ArrayList<>();
+	        try {
+	            String query = "SELECT nom, prenom FROM Employee";
+	            PreparedStatement statement = conn.getConnexion().prepareStatement(query);
+	            ResultSet resultSet = statement.executeQuery();
+	            while (resultSet.next()) {
+	                String fullName = resultSet.getString("nom") + " " + resultSet.getString("prenom");
+	                employeeNames.add(fullName);
+	            }
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return employeeNames;
+	    }
+
 }

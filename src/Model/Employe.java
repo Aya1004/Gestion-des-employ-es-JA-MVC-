@@ -1,6 +1,6 @@
-package Model;
+ package Model;
 
-
+import javax.swing.ComboBoxModel;
 
 public class Employe {
 	private int id;
@@ -11,6 +11,7 @@ public class Employe {
 	private double salaire;
 	private Role role;
 	private Poste poste;
+	private  int usedBalnce;
 	
 
 	public Employe(int id,String nom,String prenom,String email,String telephone,double salaire,Role role,Poste poste) {
@@ -27,6 +28,7 @@ public class Employe {
 	public int getId() {
 		return id;
 	}
+	
 	public String getNom() {
 		return nom;
 	}
@@ -68,6 +70,17 @@ public class Employe {
 	}
 	public void setPoste(Poste poste) {
 		this.poste = poste;
+	}
+	public int getUsedBalance() {
+		return usedBalnce;
+	}
+	public void setUsedBalance(int usedBalnce) {
+		this.usedBalnce = usedBalnce;
+	}
+
+	public static ComboBoxModel values() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
