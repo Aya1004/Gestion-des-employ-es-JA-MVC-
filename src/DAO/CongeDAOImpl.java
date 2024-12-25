@@ -70,9 +70,10 @@ private static DBConnection conn;
         		ResultSet rs = stmt.executeQuery()) {
             while (rs.next()) {
                 cong.add( new Conge(
+                rs.getInt("idCong"),
+                rs.getString("nom"),
                 rs.getString("dateDebut"),
                 rs.getString("dateFin"),
-                rs.getString("nom"),
                 	TypeCong.valueOf(rs.getString("typee"))
                 	));
             }

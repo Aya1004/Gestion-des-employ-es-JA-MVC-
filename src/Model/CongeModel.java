@@ -31,7 +31,7 @@ private CongeDAOImpl dao;
 			System.out.println("Les dates doivent être au format 'yyyy-MM-dd'.");
 	        return false;
 		}
-		Conge conge= new Conge(nom,DateDebut,DateFin,type);
+		Conge conge= new Conge(0,nom,DateDebut,DateFin,type);
 		dao.add(conge);
 		return true;
 	}
@@ -58,7 +58,7 @@ private CongeDAOImpl dao;
 		        System.out.println("Les dates doivent être au format 'yyyy-MM-dd'.");
 		        return false;
 		    }
-			Conge nv= new Conge(nom,dateDebut,dateFin,type);
+			Conge nv= new Conge(id,nom,dateDebut,dateFin,type);
 			dao.update(nv);
 			return true;
 		}

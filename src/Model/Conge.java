@@ -10,7 +10,8 @@ public class Conge {
 	private String dateFin;
 	public  TypeCong type;
 	
-	public Conge(String nom,String dateDebut,String dateFin,TypeCong type) {
+	public Conge(int idCong,String nom,String dateDebut,String dateFin,TypeCong type) {
+	this.idCong=idCong;
 	this.nom=nom;
 	this.dateDebut=dateDebut;
 	this.dateFin=dateFin;

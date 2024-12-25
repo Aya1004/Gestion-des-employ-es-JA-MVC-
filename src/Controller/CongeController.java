@@ -84,10 +84,10 @@ public class CongeController {
 		            for (int i = 0; i < updatedHolidays.size(); i++) {
 		                Conge conge = updatedHolidays.get(i);
 		                data[i][0] = conge.getIdC();
-		                data[i][1] = conge.getDateD();
-		                data[i][2] = conge.getDateF();
-		                data[i][3] = conge.getType();
-		                data[i][4] = conge.getNom();
+		                data[i][1] = conge.getNom();
+		                data[i][2] = conge.getDateD();
+		                data[i][3] = conge.getDateF();
+		                data[i][4] = conge.getType();
 		            }
 		            view.updateTable(data);
 
@@ -119,10 +119,10 @@ public class CongeController {
 			}
 		}
 		private void delete() {
-			 view.table.addMouseListener(new MouseAdapter() {
+			 view.tablee.addMouseListener(new MouseAdapter() {
 		         @Override
 		         public void mouseClicked(MouseEvent e) {
-		             int row = view.table.getSelectedRow();
+		             int row = view.tablee.getSelectedRow();
 		             if (row != -1) {
 		                 int Id = (int) view.model.getValueAt(row, 0); 
 		                 String nom = (String) view.model.getValueAt(row, 1);
@@ -149,7 +149,7 @@ public class CongeController {
 		 });
 		 }
 		private void update() {
-			 view.table.addMouseListener(new MouseAdapter() {
+			 view.tablee.addMouseListener(new MouseAdapter() {
 		         @Override
 		         public void mouseClicked(MouseEvent e) {
 		        	 String nom= view.getNom();
@@ -161,7 +161,7 @@ public class CongeController {
 		     			view.afficherMessageError("Tous les champs doivent être remplis.");
 		     			return;
 		     		}
-		        	   int row = view.table.getSelectedRow(); 
+		        	   int row = view.tablee.getSelectedRow(); 
 		               if (row != -1) { 
 		                   int id = (int) view.model.getValueAt(row, 0); 
 		                   String nomT = (String) view.model.getValueAt(row, 1);
@@ -187,10 +187,10 @@ public class CongeController {
 	                     for (int i = 0; i < updatedHolidays.size(); i++) {
 	                         Conge holiday = updatedHolidays.get(i);
 	                         data[i][0] = holiday.getIdC();
-	                         data[i][2] = holiday.getNom();
-	                         data[i][4] = holiday.getDateD();
-	                         data[i][1] = holiday.getDateF();
-	                         data[i][3] = holiday.getType();
+	                         data[i][1] = holiday.getNom();
+	                         data[i][2] = holiday.getDateD();
+	                         data[i][3] = holiday.getDateF();
+	                         data[i][4] = holiday.getType();
 	                     }
 	                     // Mettre à jour le tableau avec les données actualisées
 	                     view.updateTable(data);

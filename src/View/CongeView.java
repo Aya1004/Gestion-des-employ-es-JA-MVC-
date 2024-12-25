@@ -39,12 +39,11 @@ public class CongeView extends JFrame{
 		 //Button
 		 public JButton ajouC =new JButton("Ajouter");
 		 public JButton suppC =new JButton("Supprimer");
-		 public JButton affC =new JButton("Afficher");
 		 public JButton modifC =new JButton("Modifier");
 		 public JButton Employes = new JButton("Employes");
 		 public JButton Conges = new JButton("Conges");
 		 //Table
-		    public JTable table;
+		    public JTable tablee;
 		    public DefaultTableModel model;
 		    public JScrollPane scrollPane;
 		 //Switch
@@ -78,15 +77,14 @@ public class CongeView extends JFrame{
 				 pan4.setLayout(new FlowLayout());
 				 pan4.add(ajouC);
 				 pan4.add(suppC);
-				 pan4.add(affC);
 				 pan4.add(modifC);
 				 
-			     String[] columnNames = { "Id", "Date Debut", "Date Fin", "Employé", "Type"};
+			     String[] columnNames = { "Id", "Employé", "Date Debut", "Date Fin", "Type"};
 			        model = new DefaultTableModel(columnNames, 0);
-			        table = new JTable(model);
-			        scrollPane = new JScrollPane(table);
+			        tablee = new JTable(model);
+			        scrollPane = new JScrollPane(tablee);
 
-				 pan3.add(new JScrollPane(table));
+				 pan3.add(new JScrollPane(tablee));
 				 
 				  
 				    setVisible(true);
