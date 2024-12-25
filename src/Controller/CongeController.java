@@ -38,7 +38,7 @@ public class CongeController {
 	}
 	
 	 private void initDateComboBoxData() {
-	        LocalDate dateDebut = LocalDate.now();
+	        LocalDate dateDebut = LocalDate.of(2024,12,23);
 	        LocalDate dateFin = LocalDate.of(2025,2,21); 
 	        
 	        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
