@@ -1,5 +1,7 @@
 package DAO;
 
+import java.io.File;
+import java.io.IOException;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,7 +24,7 @@ private static DBConnection conn;
 		conn=new DBConnection();	
 		}
 	@Override
-	public void add(Conge cong) {
+	public boolean add(Conge cong) {
 		String sql="INSERT INTO Conge (nom,dateDebut,dateFin,typee) VALUES (?,?,?,?)";
 		try(PreparedStatement stmt=conn.getConnexion().prepareStatement(sql)){
 			stmt.setString(1,cong.getNom());
@@ -33,6 +35,7 @@ private static DBConnection conn;
 		}catch(SQLException e) {
 		e.printStackTrace();	
 		}
+		return false;
 	}
 	@Override
 	public void update(Conge cong) {
@@ -128,6 +131,20 @@ private static DBConnection conn;
 	            e.printStackTrace();
 	        }
 	    }
+	@Override
+	public int importData(File filepath) throws IOException {
+        throw new RuntimeException("Access denied");
+	}
+	@Override
+	public void exportData(File filepath) throws IOException {
+		 throw new RuntimeException("Access denied");
+		
+	}
+	@Override
+	public List<Employe> getAll() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	
 }

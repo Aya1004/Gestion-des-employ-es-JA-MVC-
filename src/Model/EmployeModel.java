@@ -1,5 +1,7 @@
 package Model;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,7 +13,7 @@ public class EmployeModel {
 	public EmployeModel(EmployeDAOImpl dao) {
 		this.dao=dao;
 	}
-	public boolean add(String nom, String prenom, String email, String telephone, double salaire, Role role, Poste poste) {
+	public boolean add(int id,String nom, String prenom, String email, String telephone, double salaire, Role role, Poste poste) {
 		if(salaire<4000) {
 			System.err.println("Salaire incorect.");
 			return false;
@@ -58,5 +60,29 @@ public class EmployeModel {
         }
 		return tabEmp;
 	}
+	 public int importData(File file) throws IOException {
+	        return dao.importData(file);
+	    }
+	 public void exportData(File file) throws IOException {
+	        dao.exportData(file);
+	    }
 
+	private boolean checkFileExists (File file) {
+		if (!file. exists()) {
+		   throw new IllegalArgumentException("Le fichier n'existe pas: " + file.getPath());
+		}
+		return true;
+	}
+		private boolean checkIsFile (File file) {
+		if (!file. isFile ()) {
+		throw new IllegalArgumentException ("Le chemin spécifié n'est pas un fichier :" + file.getPath());
+		}
+		return true;
+		}
+		private boolean checkIsReadable (File file) {
+		if (!file.canRead()) {
+		throw new IllegalArgumentException ("Le fichier n'est pas lisible:"+ file.getPath());
+		}
+		return true;
+}
 }

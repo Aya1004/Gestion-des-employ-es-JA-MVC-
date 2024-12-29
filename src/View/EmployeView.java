@@ -1,32 +1,16 @@
 package View;
 
-import java.awt.BorderLayout;
-import java.awt.CardLayout;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import javax.swing.JButton;
-import javax.swing.JComboBox;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.JTextField;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
+import java.awt.*;
 import Model.Poste;
 import Model.Role;
 
 public class EmployeView extends JFrame {
-    // Panel principal et panneaux de contenu
-    private JPanel mainPanel = new JPanel();
-    private JPanel employePanel = new JPanel();
-    private CongeView congeView = new CongeView();  // Le panneau des congés
     private JPanel pan2 = new JPanel();
     private JPanel pan3 = new JPanel();
     private JPanel pan4 = new JPanel();
-
-    // TextField/ComboBox
     public JTextField saisie = new JTextField(20);
     public JTextField saisie1 = new JTextField(20);
     public JTextField saisie2 = new JTextField(20);
@@ -34,36 +18,27 @@ public class EmployeView extends JFrame {
     public JTextField saisie4 = new JTextField(20);
     public JComboBox<Role> choix = new JComboBox<>(Role.values());
     public JComboBox<Poste> choix2 = new JComboBox<>(Poste.values());
-
-    // Buttons
     public JButton ajou = new JButton("Ajouter");
     public JButton supp = new JButton("Supprimer");
     public JButton aff = new JButton("Afficher");
     public JButton modif = new JButton("Modifier");
+    public JButton impor = new JButton("Import");
+    public JButton expor = new JButton("Export");
 
-    // Table
+    public JButton Conges = new JButton("Aller à Congés");
     public JTable table;
     public DefaultTableModel model;
-    public JScrollPane scrollPane;
-
-    // CardLayout pour gérer la navigation
-    private CardLayout cardLayout;
 
     public EmployeView() {
-        setTitle("Gestion des employés et des congés");
-        setSize(700, 600);
+    	setSize(700,600);
+
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
+        add(pan4, BorderLayout.SOUTH);
+        add(pan2, BorderLayout.NORTH);
+        add(pan3, BorderLayout.CENTER);
 
-     
-         add(employePanel);
-        // Panel Employé (panneau de contenu)
-        employePanel.setLayout(new BorderLayout());
-        employePanel.add(pan4, BorderLayout.SOUTH);
-        employePanel.add(pan2, BorderLayout.NORTH);
-        employePanel.add(pan3, BorderLayout.CENTER);
-
-        // Configurer les éléments du panneau Employé
         pan2.setLayout(new GridLayout(8, 2));
         pan2.add(new JLabel("Nom"));
         pan2.add(saisie);
@@ -85,17 +60,15 @@ public class EmployeView extends JFrame {
         pan4.add(supp);
         pan4.add(aff);
         pan4.add(modif);
-
-        String[] columnNames = {"Id", "Nom", "Prenom", "Telephone", "Email", "Salaire", "Role", "Poste"};
+        pan4.add(impor);
+        pan4.add(expor);
+        
+        String[] columnNames = {"Id", "Nom", "Prenom", "Téléphone", "Email", "Salaire", "Role", "Poste"};
         model = new DefaultTableModel(columnNames, 0);
         table = new JTable(model);
-        scrollPane = new JScrollPane(table);
-
-        pan3.add(scrollPane);
-
+        pan3.add(new JScrollPane(table));
         setVisible(true);
     }
-
     public JTextField getFirstName() { return saisie1; }
     public JTextField getLastName() { return saisie; }
     public JTextField getPhone() { return saisie3; }
@@ -109,4 +82,10 @@ public class EmployeView extends JFrame {
     public JButton getUpdateButton() { return modif; }
     public JButton getDeleteButton() { return supp; }
     public JButton getDisplayButton() { return aff; }
+    public void afficherMessageError(String message) {
+		JOptionPane.showMessageDialog(this, message,"Error",JOptionPane.ERROR_MESSAGE);
+	}
+	public void afficherMessageSuccess(String message) {
+		JOptionPane.showMessageDialog(this, message,"Succes",JOptionPane.INFORMATION_MESSAGE);
+	}
 }

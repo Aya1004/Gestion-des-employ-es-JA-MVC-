@@ -1,5 +1,11 @@
 package DAO;
 
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,7 +18,7 @@ import Model.Employe;
 import Model.Poste;
 import Model.Role;
 
-public class EmployeDAOImpl implements GenericDAOI<Employe> {
+public class EmployeDAOImpl implements GenericDAOI<Employe>{
 	private static DBConnection conn;
 	
 	public EmployeDAOImpl() {
@@ -20,7 +26,7 @@ public class EmployeDAOImpl implements GenericDAOI<Employe> {
 	}
 	
 	@Override
-	public void add(Employe emp) {
+	public boolean add(Employe emp) {
 		String sql="INSERT INTO Employee (nom,prenom,email,phone,salaire,role,poste) VALUES (?,?,?,?,?,?,?)";
 		try(PreparedStatement stmt=conn.getConnexion().prepareStatement(sql)){
 			stmt.setString(1,emp.getNom());
@@ -36,6 +42,7 @@ public class EmployeDAOImpl implements GenericDAOI<Employe> {
 			System.out.println(e.getMessage());            
             JOptionPane.showMessageDialog(null, "Echec d'ajout!"+e.getMessage(), "Erreur", JOptionPane.ERROR_MESSAGE);
 		}
+		return false;
 	}
 	@Override
     public void update(Employe emp) {
@@ -139,4 +146,71 @@ public class EmployeDAOImpl implements GenericDAOI<Employe> {
 	        return employeeNames;
 	    }
 
+	 @Override
+	 public int importData(File file) throws IOException {
+		    int counter = 0;
+		    try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
+		        String line;
+		        while ((line = reader.readLine()) != null) {
+		                String[] values = line.split(",");
+		                if (add(new Employe(
+		                    Integer.parseInt(values[0]),
+		                    values[1],
+		                    values[2],
+		                    values[3],
+		                    values[4],
+		                    Double.parseDouble(values[5]),
+		                    Role.valueOf(values[6]),
+		                    Poste.valueOf(values[7])
+		                ))) {
+		                    counter++;
+		        }
+		    }
+		    return counter;
+		}
+	 }
+
+	  @Override
+	    public List<Employe> getAll() {
+	        List<Employe> employers = new ArrayList<>();
+	        try (ResultSet getResult = conn.getConnexion().prepareStatement("SELECT * FROM Employee").executeQuery()) {
+
+	            while (getResult.next()) {
+	                employers.add(new Employe(
+	                    getResult.getInt("id"), 
+	                    getResult.getString("nom"), 
+	                    getResult.getString("prenom"), 
+	                    getResult.getString("email"), 
+	                    getResult.getString("phone"), 
+	                    getResult.getDouble("salaire"), 
+	                    Role.valueOf(getResult.getString("role")), 
+	                    Poste.valueOf(getResult.getString("poste"))
+	                ));
+	            }
+
+	        } catch (SQLException getException) {
+	            getException.printStackTrace();
+	        }
+	        return employers;
+	    }
+	@Override
+	public void exportData(File fileName) throws IOException {
+		try(BufferedWriter writer = new BufferedWriter(new FileWriter(fileName)))
+		{	
+			for(Employe employe : getAll()) {
+				writer.write(
+						employe.getId() + "," +
+						employe.getNom()+ "," +
+						employe.getPrenom()+ "," +
+						employe.getEmail()+ "," +
+						employe.getTelephone()+ "," +
+						employe.getSalaire()+ "," +	
+						employe.getRole()+ "," +
+						employe.getPoste()
+				);
+				writer.newLine();
+			}
+		}
+				
+	}
 }

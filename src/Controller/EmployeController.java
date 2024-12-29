@@ -3,10 +3,16 @@ package Controller;
 import java.awt.CardLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.rmi.AccessException;
 import java.util.ArrayList;
 
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
+import DAO.EmployeDAOImpl;
 import Model.CongeModel;
 import Model.EmployeModel;
 import Model.Poste;
@@ -16,11 +22,14 @@ import View.EmployeView;
 public class EmployeController {
 	private EmployeView view;
 	private EmployeModel model;
+	private EmployeDAOImpl dao;
 	private CongeModel model2;
 
 	public EmployeController(EmployeView view,EmployeModel model) {
 		this.view=view;
 		this.model=model;
+		this.view.impor.addActionListener(e->importData()); 
+		this.view.expor.addActionListener(e->exportData()); 
 		this.view.ajou.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
@@ -38,7 +47,7 @@ public class EmployeController {
 				Poste poste=(Poste) view.getPostes().getSelectedItem();
 				try {
 					double salaire = Double.parseDouble(view.getSalary().getText());
-					if(model.add(nom, prenom, email, telephone, salaire, role, poste)) {
+					if(model.add(1,nom, prenom, email, telephone, salaire, role, poste)) {
 						JOptionPane.showMessageDialog(null, "Employé ajouté avec succées","Comfirmation",JOptionPane.INFORMATION_MESSAGE);
 					}
 					else JOptionPane.showMessageDialog(null, "Echec d'ajout","Error",JOptionPane.ERROR_MESSAGE);
@@ -104,6 +113,38 @@ public class EmployeController {
 			}
 			}
 		});
- }
+	}
+	private void importData () {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setDialogTitle("Select an XML file to import");
+        fileChooser.setFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+        int result = fileChooser.showOpenDialog(view);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try{
+                JOptionPane.showMessageDialog(view, model.importData(selectedFile) + " Data imported successfully.");
+            }catch (IOException e){
+                JOptionPane.showMessageDialog(null, "Failed to import data", "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }
+	 private void exportData () {
+	        JFileChooser fileChooser = new JFileChooser();
+	        fileChooser.setDialogTitle("Select an XML file to import");
+	        fileChooser.setFileFilter(new FileNameExtensionFilter("Text Files", "txt"));
+	        fileChooser.setCurrentDirectory(new File(System.getProperty("user.dir")));
+	        int result = fileChooser.showOpenDialog(view);
+	        if (result == JFileChooser.APPROVE_OPTION) {
+	            File selectedFile = fileChooser.getSelectedFile();
+	            JOptionPane.showMessageDialog(view," Data exported successfully.");
+	            try{
+	                model.exportData(selectedFile);
+	            }catch (IOException e){
+	                JOptionPane.showMessageDialog(null, "Failed to import data", "Error", JOptionPane.ERROR_MESSAGE);
+	            }
+	        }
+	    }
 
 }
+

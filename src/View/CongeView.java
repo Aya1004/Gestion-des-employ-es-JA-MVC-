@@ -40,13 +40,12 @@ public class CongeView extends JFrame{
 		 public JButton ajouC =new JButton("Ajouter");
 		 public JButton suppC =new JButton("Supprimer");
 		 public JButton modifC =new JButton("Modifier");
-		 public JButton Employes = new JButton("Employes");
-		 public JButton Conges = new JButton("Conges");
 		 //Table
 		    public JTable tablee;
 		    public DefaultTableModel model;
 		    public JScrollPane scrollPane;
 		 //Switch
+		    
 		   
 
 		 public CongeView() {
@@ -55,8 +54,6 @@ public class CongeView extends JFrame{
 		        setDefaultCloseOperation(EXIT_ON_CLOSE);
 		        setLocationRelativeTo(null);
 				add(congePanel);
-				congePanel.add(Employes);
-				congePanel.add(Conges);
 				congePanel.setLayout(new BorderLayout());
 				congePanel.add(pan4,BorderLayout.SOUTH); 
 				congePanel.add(pan2,BorderLayout.NORTH);

@@ -76,4 +76,5 @@ private CongeDAOImpl dao;
 	    public void updateSolde(String nom, int nouveauSolde) {
 	    	dao.updateSolde(nom, nouveauSolde);
 	    }
+	    
 }
